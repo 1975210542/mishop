@@ -65,9 +65,9 @@ func GetDay() string {
 }
 
 // 获取订单号
-func GetOrderId() string  {
+func GetOrderId() string {
 	template := "200601021504"
-	return time.Now().Format(template)+GetRandomNum()
+	return time.Now().Format(template) + GetRandomNum()
 }
 
 func ResizeImage(filename string) {
@@ -86,57 +86,59 @@ func ResizeImage(filename string) {
 
 }
 
-func FormatImg(picname string) string  {
-	ossStatus,err := beego.AppConfig.Bool("ossStatus")
-	flag := strings.Contains(picname,"/static")
+func FormatImg(picname string) string {
+	ossStatus, err := beego.AppConfig.Bool("ossStatus")
+	flag := strings.Contains(picname, "/static")
 	if err != nil {
 		// 判断目录前面是否有/
 		if flag {
 			return picname
-		}else {
-			return "/"+picname
+		} else {
+			return "/" + picname
 		}
 	}
 	if ossStatus {
-		return beego.AppConfig.String("ossDomain")+"/"+picname
-	}else {
+		return beego.AppConfig.String("ossDomain") + "/" + picname
+	} else {
 		if flag {
 			return picname
-		}else {
-			return "/"+picname
+		} else {
+			return "/" + picname
 		}
 	}
 }
 
 func FormatAttr(str string) string {
 	md := []byte(str)
-	htmlByte := markdown.ToHTML(md,nil,nil)
+	htmlByte := markdown.ToHTML(md, nil, nil)
 	return string(htmlByte)
 }
 
 func CutStr(str string) string {
 	rs := []int32(str)
 	if len(rs) > 15 {
-		return string(rs[0:15])+"..."
+		return string(rs[0:15]) + "..."
 	}
 	return str
 }
+
 // 乘法的函数
-func Mul(price float64,num int) float64 {
-	return price*(float64(num))
+func Mul(price float64, num int) float64 {
+	return price * (float64(num))
 }
-// 判断4 或 9 
-func Judge(num int)bool  {
-	if num == 4 || num ==9 {
+
+// 判断4 或 9
+func Judge(num int) bool {
+	if num == 4 || num == 9 {
 		return true
-	}else {
+	} else {
 		return false
 	}
 
 }
 
 // 生成四位随机数
-func GetRandomNum() string  {
+func GetRandomNum() string {
 	var str string
 	for i := 0; i < 4; i++ {
 		current := rand.Intn(10)

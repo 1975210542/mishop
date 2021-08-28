@@ -8,18 +8,18 @@ import (
 	_ "mi.com/routers"
 )
 
-func init()  {
+func init() {
 	gob.Register(models.Manager{})
 }
 
 func main() {
 	// 注册模板函数
-	beego.AddFuncMap("unixToDate",models.UnixToDate)
-	beego.AddFuncMap("formatImg",models.FormatImg)
-	beego.AddFuncMap("formatAttr",models.FormatAttr)
-	beego.AddFuncMap("cutStr",models.CutStr)
-	beego.AddFuncMap("mul",models.Mul)
-	beego.AddFuncMap("judge",models.Judge)
+	_ = beego.AddFuncMap("unixToDate", models.UnixToDate)
+	_ = beego.AddFuncMap("formatImg", models.FormatImg)
+	_ = beego.AddFuncMap("formatAttr", models.FormatAttr)
+	_ = beego.AddFuncMap("cutStr", models.CutStr)
+	_ = beego.AddFuncMap("mul", models.Mul)
+	_ = beego.AddFuncMap("judge", models.Judge)
 
 	// 配置session保存在redis里面
 	beego.BConfig.WebConfig.Session.SessionProvider = "redis"
@@ -27,4 +27,3 @@ func main() {
 	beego.Run()
 	defer models.DB.Close()
 }
-
