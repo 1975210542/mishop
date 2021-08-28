@@ -9,6 +9,7 @@ import (
 func init() {
 	beego.Router("/", &mindex.IndexController{})
 	beego.Router("/login", &mindex.LoginController{})
+	beego.Router("/login/verify", &mindex.LoginController{}, "get:LoginVerify")
 	beego.Router("/pass", &mindex.LoginController{}, "get:Pass")
 	beego.Router("/pass/login", &mindex.LoginController{}, "post:Login")
 	beego.Router("/pass/loginOut", &mindex.LoginController{}, "get:LoginOut")

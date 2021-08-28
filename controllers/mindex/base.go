@@ -13,30 +13,29 @@ type BaseController struct {
 	beego.Controller
 }
 
-
-func (this *BaseController) SuperInit()  {
+func (this *BaseController) SuperInit() {
 	//获取顶部导航
 	topNav := []models.Nav{}
 
-	if hasTopNav := models.CacheDb.Get("topNav",&topNav); hasTopNav == true {
+	if hasTopNav := models.CacheDb.Get("topNav", &topNav); hasTopNav == true {
 		this.Data["topNavList"] = topNav
 	} else {
 		models.DB.Where("status=1 AND position=1").Order("sort desc").Find(&topNav)
 		this.Data["topNavList"] = topNav
-		models.CacheDb.Set("topNav",topNav)
+		models.CacheDb.Set("topNav", topNav)
 	}
 
 	// 左侧分类
 	goodsCate := []models.GoodsCate{}
 
-	if hasGoodsCate := models.CacheDb.Get("goodsCate",&goodsCate); hasGoodsCate == true {
+	if hasGoodsCate := models.CacheDb.Get("goodsCate", &goodsCate); hasGoodsCate == true {
 		this.Data["goodsCateList"] = goodsCate
 	} else {
 		models.DB.Preload("GoodsCateItem", func(db *gorm.DB) *gorm.DB {
 			return db.Where("goods_cate.status=1").Order("goods_cate.sort DESC")
 		}).Where("pid=0 AND status=1").Order("sort desc").Find(&goodsCate)
 		this.Data["goodsCateList"] = goodsCate
-		models.CacheDb.Set("goodsCate",goodsCate)
+		models.CacheDb.Set("goodsCate", goodsCate)
 	}
 
 	// 获取中间导航数据
@@ -56,7 +55,7 @@ func (this *BaseController) SuperInit()  {
 			middleNav[i].GoodsItem = goods
 			if len(goods) > 1 {
 				middleNav[i].GoodsNil = "NO"
-			}else {
+			} else {
 				middleNav[i].GoodsNil = "YES"
 			}
 		}
@@ -67,8 +66,8 @@ func (this *BaseController) SuperInit()  {
 
 	// 判断用户是否登录
 	user := models.User{}
-	models.Cookie.Get(this.Ctx,"userinfo",&user)
-	if len(user.Phone) ==11 {
+	models.Cookie.Get(this.Ctx, "userinfo", &user)
+	if len(user.Phone) == 11 {
 		str := fmt.Sprintf(`<ul>
 			<li class="userinfo">
 				<a href="#">%v</a>		
@@ -86,7 +85,7 @@ func (this *BaseController) SuperInit()  {
 		</ul> `, user.Email)
 		this.Data["userinfo"] = str
 
-	}else {
+	} else {
 		str := fmt.Sprintf(`<ul>
 			<li><a href="/login/" target="_blank">登录</a></li>
 			<li>|</li>
@@ -95,17 +94,17 @@ func (this *BaseController) SuperInit()  {
 		this.Data["userinfo"] = str
 
 	}
-	ulrPath,_ := url.Parse(this.Ctx.Request.URL.String())
+	ulrPath, _ := url.Parse(this.Ctx.Request.URL.String())
 	this.Data["pathname"] = ulrPath.Path
 
 }
 
-func (this *BaseController) Success(message,redirect string) {
+func (this *BaseController) Success(message, redirect string) {
 	this.Data["message"] = message
 	this.Data["redirect"] = redirect
 	this.TplName = "admin/public/success.html"
 }
-func (this *BaseController) Error(message,redirect string) {
+func (this *BaseController) Error(message, redirect string) {
 	this.Data["message"] = message
 	this.Data["redirect"] = redirect
 	this.TplName = "admin/public/error.html"
